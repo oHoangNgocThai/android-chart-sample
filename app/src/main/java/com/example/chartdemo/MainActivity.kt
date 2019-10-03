@@ -1,22 +1,17 @@
 package com.example.chartdemo
 
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.os.Bundle
+import android.view.Surface
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.components.YAxis
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.CombinedData
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,6 +24,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         supportActionBar?.title = "Line Chart Demo"
+
+        iv_main_reload.setOnClickListener {
+            rotateScreen()
+        }
 
         chart?.apply {
             setBackgroundColor(Color.WHITE)
@@ -113,9 +112,23 @@ class MainActivity : AppCompatActivity() {
             form = Legend.LegendForm.LINE
             yEntrySpace = 50F
             // get data color
+            textColor = Color.BLACK
+            textSize = 12F
         }
 
         chart.animateXY(2000, 2000)
         chart.invalidate()
+    }
+
+    private fun rotateScreen() {
+        val windowManager = applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        when (windowManager.defaultDisplay.orientation) {
+            Surface.ROTATION_0 -> {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            }
+            Surface.ROTATION_90 -> {
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            }
+        }
     }
 }
